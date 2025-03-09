@@ -1,11 +1,11 @@
 import random
-import gradio as gr
+import streamlit as st
 
 # Possible choices
 CHOICES = ["Rock", "Paper", "Seizure"]
 
 def ai_choice():
-    """AI selects a move using randomness (can be replaced with Hugging Face model)."""
+    """AI selects a move using randomness."""
     return random.choice(CHOICES)
 
 def determine_winner(player, ai):
@@ -19,19 +19,17 @@ def determine_winner(player, ai):
     else:
         return "AI wins!"
 
-def play_game(player_choice):
-    """Handles game logic when a player makes a choice."""
+# Streamlit UI
+st.title("Rock-Paper-Seizure Game")
+st.write("Play against an AI that makes a random move!")
+
+# User selection
+player_choice = st.radio("Choose your move:", CHOICES)
+
+if st.button("Play"):
     ai_move = ai_choice()
     result = determine_winner(player_choice, ai_move)
-    return f"AI chose: {ai_move}\n{result}"
-
-# Gradio UI
-demo = gr.Interface(
-    fn=play_game,
-    inputs=gr.Radio(CHOICES, label="Choose your move"),
-    outputs=gr.Textbox(label="Result"),
-    title="Rock-Paper-Seizure Game",
-    description="Play against an AI that makes a random move! (Future versions will use a Hugging Face model.)"
-)
-
-demo.launch()
+    
+    # Display result
+    st.write(f"AI chose: **{ai_move}**")
+    st.success(result)
